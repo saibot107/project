@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1741887797 source:c:\users\admin\desktop\codee\devc++\proj\chuongtrinh\main.cpp
+	<iostream>
+	"bcrypt.h"
+	<cstring>
+	<cstdlib>
+	<vector>
+
