@@ -30,3 +30,21 @@
 *.exe
 *.out
 *.app
+
+# === Custom for your project ===
+
+# Backup and temporary files
+*.bak
+*.tmp
+*~
+*.old
+*_backup.*
+*_copy.*
+
+# VS Code settings
+.vscode/
+
+# Data, logs, backups
+data/
+logs/
+backup/
