@@ -99,7 +99,7 @@ public:
         cout << "Khong tim thay tai khoan.\n";
     }
 
-    static void khoiPhucMatKhau() {
+    static void doiMatKhau() {
         string user, oldPassword, newPassword;
         cout << "Nhap ten tai khoan: ";
         getline(cin, user);
@@ -243,7 +243,7 @@ int main() {
         cout << "Khong the tai du lieu, tao file moi\n";
     }
     do {
-        cout << "\n1. Dang ky\n2. Admin tao tai khoan\n3. Dang nhap\n4. Quen mat khau\n5. Khoi phuc mat khau\n0. Thoat\nChon: ";
+        cout << "\n1. Dang ky\n2. Admin tao tai khoan\n3. Dang nhap\n4. Quen mat khau\n5. Doi mat khau\n0. Thoat\nChon: ";
         cin >> choices;
         cin.ignore();
 
@@ -252,7 +252,7 @@ int main() {
         else if (choices == 2) acc.dangky(true);
         else if (choices == 3) acc.dangnhap();
         else if (choices == 4) acc.quenMatKhau();
-        else if (choices == 5) acc.khoiPhucMatKhau();
+        else if (choices == 5) acc.doiMatKhau();
         else if (choices != 0) cout << "lua chon khong hop le\n";
     } while (choices != 0);
     cout << "thoat chuong trinh";
