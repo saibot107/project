@@ -60,6 +60,59 @@ public:
     static vector<account> danhsachtaikhoan;
     static const string DATA_FILE;
 
+    static void xemThongtin(){
+
+        string user;
+        cout << "Nhap ten tai khoan: ";
+        getline(cin, user);
+
+        auto it = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(), [&user](const account& acc) {return acc.username == user;});
+
+        if(it == danhsachtaikhoan.end()){
+            cout << "Tai khoan khong ton tai.\n";
+            return;
+        }
+
+        account& acc = *it;
+        
+                string matkhau;
+                cout << "Nhap mat khau: ";
+                getline(cin, matkhau);
+                if(acc.kiemtramatkhau(matkhau)){
+                cout << "Thong tin tai khoan:\n";
+                cout << "Ten tai khoan: " << acc.username << "\n";
+                cout << "Email: " << acc.email << "\n";
+                cout << "So dien thoai: " << acc.phone << "\n";
+                return;
+                }
+                else{
+                    cout << "Mat khau nhap khong dung.\n";
+                    return;
+                }
+            }
+    /* for(auto& acc : danhsachtaikhoan){
+            if(acc.username == user){
+                string matkhau;
+                cout << "Nhap mat khau: ";
+                getline(cin, matkhau);
+                if(acc.kiemtramatkhau(matkhau)){
+                cout << "Thong tin tai khoan:\n";
+                cout << "Ten tai khoan: " << acc.username << "\n";
+                cout << "Email: " << acc.email << "\n";
+                cout << "So dien thoai: " << acc.phone << "\n";
+                return;
+                }
+                else{
+                    cout << "Mat khau nhap khong dung.\n";
+                    return;
+                }
+            }
+        }
+        cout << "Khong tim thay tai khoan.\n";
+    }
+        */
+        
+
     static void thaydoiThongtin(){
 
         string user;
@@ -405,7 +458,7 @@ int main() {
         cout << "Khong the tai du lieu, tao file moi\n";
     }
     do {
-        cout << "\n1. Dang ky\n2. Admin tao tai khoan\n3. Dang nhap\n4. Quen mat khau\n5. Doi mat khau\n6. Thay doi thong tin\n0. Thoat\nChon: ";
+        cout << "\n1. Dang ky\n2. Admin tao tai khoan\n3. Dang nhap\n4. Quen mat khau\n5. Doi mat khau\n6. Thay doi thong tin\n7. Xem thong tin\n0. Thoat\nChon: ";
         cin >> choices;
         cin.ignore();
 
@@ -416,6 +469,7 @@ int main() {
         else if (choices == 4) acc.quenMatKhau();
         else if (choices == 5) acc.doiMatKhau();
         else if (choices == 6) acc.thaydoiThongtin();
+        else if (choices == 7) acc.xemThongtin();
         else if (choices != 0) cout << "lua chon khong hop le\n";
     } while (choices != 0);
     cout << "thoat chuong trinh";
