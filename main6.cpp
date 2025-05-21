@@ -643,7 +643,7 @@ int main() {
         cout << "Khong the tai du lieu, tao file moi\n";
     }
     do {
-        cout << "\n1. Dang ky\n2. Admin tao tai khoan\n3. Dang nhap\n4. Quen mat khau\n5. Doi mat khau\n6. Thay doi thong tin\n7. Xem thong tin\n0. Thoat\nChon: ";
+        cout << "\n1. Dang ky\n2. Admin tao tai khoan\n3. Dang nhap\n4. Quen mat khau\n5. Doi mat khau\n6. Thay doi thong tin\n7. Xem thong tin\n8. Chuyen diem\n9. Xem lich su giao dich\n0. Thoat\nChon: ";
         cin >> choices;
         cin.ignore();
 
@@ -655,6 +655,8 @@ int main() {
         else if (choices == 5) acc.doiMatKhau();
         else if (choices == 6) acc.thaydoiThongtin();
         else if (choices == 7) acc.xemThongtin();
+        else if (choices == 8) acc.chuyenDiem();
+        else if (choices == 9) acc.xemLichSuGiaoDich();
         else if (choices != 0) cout << "lua chon khong hop le\n";
     } while (choices != 0);
     cout << "thoat chuong trinh";
