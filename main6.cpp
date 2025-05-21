@@ -508,7 +508,7 @@ public:
         cout << "nhap tai khoan: ";
         getline(cin, username);
 
-        if (kiemtrataikhoantrung(username)) {
+        if (account::kiemtrataikhoantrung(username)) {
             cout << "tai khoan da ton tai";
             return;
         }
