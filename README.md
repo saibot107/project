@@ -1,13 +1,16 @@
 - Các thành viên kèm với công việc được giao
+
 phần A:
 + tạo mới tài khoản khi đăng ký : Lê Phạm Khánh Huy
 + lưu trữ dữ liệu : Lê Phạm Khánh Huy, Phan Giảng Bình
 + sinh mật khẩu tự động : 
 + thay đổi mật khẩu : Trần Quang Huy
 + đăng nhập : Lê Phạm Khánh Huy
+
 phần B:
 + các chức năng của người dùng : Lê Ngọc Dũng
 + các chức năng của quản lý : Lê Phạm Khánh Huy
+
 phần C: 
 + giao dịch chuyển điểm, lịch sử giao dịch : Trần Quang Huy
 + những phần còn lại : Phan Giảng Bình
