@@ -10,12 +10,13 @@
 #include <ctime>
 #include "bcrypt.h"
 using namespace std;
-
+void clrscr(){
+    system("cls");
+}
 enum loaitaikhoan {
     admin = 0,
     user = 1
 };
-
 class Wallet {
 private:
     string wallet_id;
@@ -25,19 +26,15 @@ public:
     static Wallet total_wallet;
     static const string WALLET_FILE;
     static const string TRANSACTION_FILE;
-
     Wallet() : balance(0.0) {
         wallet_id = generateWalletId();
     }
-
     Wallet(double initial_balance) : balance(initial_balance) {
         wallet_id = generateWalletId();
     }
-
     string getWalletId() const { return wallet_id; }
     double getBalance() const { return balance; }
     void setBalance(double b) { balance = b; }
-
     static string generateWalletId() {
         random_device rd;
         mt19937 gen(rd());
@@ -49,7 +46,6 @@ public:
         }
         return id;
     }
-
     static bool saveTransactionLog(const string& transaction) {
         ofstream file(TRANSACTION_FILE, ios::app);
         if (!file.is_open()) return false;
@@ -57,7 +53,6 @@ public:
         file.close();
         return true;
     }
-
     static bool loadTransactionLog() {
         ifstream file(TRANSACTION_FILE);
         if (!file.is_open()) return false;
@@ -70,12 +65,10 @@ public:
         return true;
     }
 };
-
 vector<string> Wallet::transaction_log;
 const string Wallet::WALLET_FILE = "wallets.txt";
 const string Wallet::TRANSACTION_FILE = "transactions.txt";
 Wallet Wallet::total_wallet(1000000.0);
-
 class account {
 private:
     string hashotp;
@@ -86,25 +79,20 @@ private:
     string id;
     loaitaikhoan loai;
     Wallet wallet;
-
     string hashOTP(const string& otp) {
         return bcrypt::generateHash(otp);
     }
-
     string hashPassword(const string& password) {
         return bcrypt::generateHash(password);
     }
-
     bool validateEmail(const string& email) {
         const regex pattern(R"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})");
         return regex_match(email, pattern);
     }
-
     bool validatePhone(const string& phone) {
         const regex pattern(R"(0[0-9]{9})");
         return regex_match(phone, pattern);
     }
-
     static string taoOTP() {
         random_device rd;
         mt19937 gen(rd());
@@ -116,19 +104,9 @@ private:
         }
         return otp;
     }
-
 public:
     static vector<account> danhsachtaikhoan;
     static const string DATA_FILE;
-
-    void clrscr() {
-        #ifdef _WIN32
-            system("cls");
-        #else
-            system("clear");
-        #endif
-    }
-
     Wallet getWallet() const { return wallet; }
     void setWallet(const Wallet& w) { wallet = w; }
     string getUsername() const { return username; }
@@ -138,7 +116,6 @@ public:
     void setEmail(const string& e) { email = e; }
     void setPhone(const string& p) { phone = p; }
     void setUsername(const string& u) { username = u; }
-
     static bool saveWallets(const vector<account>& accounts) {
         ofstream file(Wallet::WALLET_FILE);
         if (!file.is_open()) return false;
@@ -148,7 +125,6 @@ public:
         file.close();
         return true;
     }
-
     static bool loadWallets(vector<account>& accounts) {
         ifstream file(Wallet::WALLET_FILE);
         if (!file.is_open()) return false;
@@ -172,22 +148,16 @@ public:
         file.close();
         return true;
     }
-
     static void xemThongtin() {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string user;
         cout << "Nhap ten tai khoan: ";
         getline(cin, user);
-
-        auto it = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),
-                         [&user](const account& acc) { return acc.username == user; });
-
+        auto it = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),[&user](const account& acc) { return acc.username == user; });
         if (it == danhsachtaikhoan.end()) {
             cout << "Tai khoan khong ton tai.\n";
             return;
         }
-
         account& acc = *it;
         string matkhau;
         cout << "Nhap mat khau: ";
@@ -203,32 +173,23 @@ public:
             cout << "Mat khau nhap khong dung.\n";
         }
     }
-
     static void thaydoiThongtin() {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string user;
         cout << "Nhap ten tai khoan: ";
         getline(cin, user);
-
-        auto it = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),
-                         [&user](const account& acc) { return acc.username == user; });
-
+        auto it = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),[&user](const account& acc) { return acc.username == user; });
         if (it == danhsachtaikhoan.end()) {
             cout << "Tai khoan khong ton tai.\n";
             return;
         }
-
         account& acc = *it;
-
         int Luachon;
         cout << "Chon thong tin muon thay doi: \n1. Email\n2. So dien thoai\n3. Ten tai khoan\nLua chon: ";
         cin >> Luachon;
         cin.ignore();
-
         string otp = taoOTP();
         acc.hashotp = acc.hashOTP(otp);
-
         switch(Luachon) {
             case 1: {
                 string nhapEmail;
@@ -318,10 +279,8 @@ public:
                 cout << "Lua chon khong hop le!\n";
         }
     }
-
     static void chuyenDiem() {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string userA, walletIdB;
         double points;
         cout << "Nhap ten tai khoan nguon: ";
@@ -331,25 +290,21 @@ public:
         cout << "Nhap so diem can chuyen: ";
         cin >> points;
         cin.ignore();
-
         auto itA = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),
                           [&userA](const account& acc) { return acc.username == userA; });
         if (itA == danhsachtaikhoan.end()) {
             cout << "Tai khoan nguon khong ton tai.\n";
             return;
         }
-
         auto itB = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),
                           [&walletIdB](const account& acc) { return acc.wallet.getWalletId() == walletIdB; });
         if (itB == danhsachtaikhoan.end() && walletIdB != Wallet::total_wallet.getWalletId()) {
             cout << "Vi dich khong ton tai.\n";
             return;
         }
-
         account& accA = *itA;
         Wallet& walletB = (walletIdB == Wallet::total_wallet.getWalletId()) ?
                          Wallet::total_wallet : itB->wallet;
-
         string password;
         cout << "Nhap mat khau tai khoan nguon: ";
         getline(cin, password);
@@ -357,7 +312,6 @@ public:
             cout << "Mat khau khong dung.\n";
             return;
         }
-
         string otp = taoOTP();
         accA.hashotp = accA.hashOTP(otp);
         cout << "Vui long nhap ma OTP ben duoi de xac nhan giao dich.\n";
@@ -369,11 +323,9 @@ public:
             cout << "Xac nhan OTP that bai.\n";
             return;
         }
-
         if (accA.wallet.getBalance() >= points) {
             accA.wallet.setBalance(accA.wallet.getBalance() - points);
             walletB.setBalance(walletB.getBalance() + points);
-
             string transaction = "Chuyen " + to_string(points) + " diem tu vi " +
                                accA.wallet.getWalletId() + " den vi " + walletIdB + " (Thanh cong)";
             Wallet::saveTransactionLog(transaction);
@@ -385,21 +337,17 @@ public:
             cout << "So du khong du. Khong the thuc hien giao dich.\n";
         }
     }
-
     static void xemLichSuGiaoDich() {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string user;
         cout << "Nhap ten tai khoan: ";
         getline(cin, user);
-
         auto it = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),
                          [&user](const account& acc) { return acc.username == user; });
         if (it == danhsachtaikhoan.end()) {
             cout << "Tai khoan khong ton tai.\n";
             return;
         }
-
         account& acc = *it;
         string matkhau;
         cout << "Nhap mat khau: ";
@@ -408,7 +356,6 @@ public:
             cout << "Mat khau khong dung.\n";
             return;
         }
-
         cout << "Lich su giao dich cua vi " << acc.wallet.getWalletId() << ":\n";
         bool found = false;
         for (const auto& transaction : Wallet::transaction_log) {
@@ -421,23 +368,18 @@ public:
             cout << "Khong co giao dich nao.\n";
         }
     }
-
     static void quenMatKhau() {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string user;
         cout << "Nhap ten tai khoan: ";
         getline(cin, user);
-
         int method;
         cout << "Chon phuong thuc xac minh: \n1. Email \n2. So dien thoai \nLua chon: ";
         cin >> method;
         cin.ignore();
-
         for (auto& acc : danhsachtaikhoan) {
             if (acc.username == user) {
                 bool xacThuc = false;
-
                 if (method == 1) {
                     string inputEmail;
                     cout << "Nhap Email: ";
@@ -454,13 +396,11 @@ public:
                     cout << "Lua chon khong hop le \n";
                     return;
                 }
-
                 if (xacThuc) {
                     cout << "Xac thuc thanh cong.\nNhap mat khau moi: ";
                     string newPassword;
                     getline(cin, newPassword);
                     acc.hashpassword = bcrypt::generateHash(newPassword);
-
                     if (luuDuLieu()) {
                         cout << "Mat khau da duoc cap nhat.\n";
                     }
@@ -476,23 +416,19 @@ public:
         }
         cout << "Khong tim thay tai khoan.\n";
     }
-
     static void doiMatKhau() {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string user, oldPassword;
         cout << "Nhap ten tai khoan: ";
         getline(cin, user);
         cout << "Nhap mat khau cu: ";
         getline(cin, oldPassword);
-
         for (auto& acc : danhsachtaikhoan) {
             if (acc.username == user && acc.kiemtramatkhau(oldPassword)) {
                 string newPassword;
                 cout << "Nhap mat khau moi: ";
                 getline(cin, newPassword);
                 acc.hashpassword = bcrypt::generateHash(newPassword);
-
                 if (luuDuLieu()) {
                     cout << "Doi mat khau thanh cong.\n";
                 } else {
@@ -503,53 +439,44 @@ public:
         }
         cout << "Ten tai khoan hoac mat khau cu sai.\n";
     }
-
     bool kiemtramatkhau(const string& password) const {
         return bcrypt::validatePassword(password, hashpassword);
     }
-
     bool kiemtraOTP(const string& otp) const {
         return bcrypt::validatePassword(otp, hashotp);
     }
-
     static bool kiemtrataikhoantrung(const string& user) {
         for (const auto& acc : danhsachtaikhoan) {
             if (acc.username == user) return true;
         }
         return false;
     }
-
     void dangky(bool laAdmin = false) {
         clrscr();
         cout << "Nhap tai khoan: ";
         getline(cin, username);
-
         if (account::kiemtrataikhoantrung(username)) {
             cout << "Tai khoan da ton tai\n";
             cout << "Enter de tiep tuc";
             cin.get();
             return;
         }
-
         cout << "Nhap mat khau: ";
         string password;
         getline(cin, password);
         hashpassword = hashPassword(password);
-
         cout << "Nhap email: ";
         getline(cin, email);
         while (!validateEmail(email)) {
             cout << "Email khong hop le. Vui long nhap lai: ";
             getline(cin, email);
         }
-
         cout << "Nhap sdt: ";
         getline(cin, phone);
         while (!validatePhone(phone)) {
             cout << "So dien thoai khong hop le. Vui long nhap lai: ";
             getline(cin, phone);
         }
-
         if (laAdmin) {
             loai = admin;
         }
@@ -560,7 +487,6 @@ public:
             cin.ignore();
             loai = (loai_ == 0) ? admin : user;
         }
-
         double initial_points = 1000.0;
         if (Wallet::total_wallet.getBalance() >= initial_points) {
             wallet.setBalance(initial_points);
@@ -573,22 +499,18 @@ public:
             cin.get();
             return;
         }
-
         danhsachtaikhoan.push_back(*this);
         cout << "Dang ky thanh cong, enter de tiep tuc";
         cin.get();
         clrscr();
     }
-
     static void dangnhap(account& loggedInAcc, bool& isLoggedIn) {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string inputpassword, user;
         cout << "Nhap tai khoan de dang nhap: ";
         getline(cin, user);
         cout << "Nhap mat khau de dang nhap: ";
         getline(cin, inputpassword);
-
         for (auto& acc : danhsachtaikhoan) {
             if (acc.username == user && acc.kiemtramatkhau(inputpassword)) {
                 loggedInAcc = acc;
@@ -598,21 +520,19 @@ public:
                 cout << "So du vi: " << acc.wallet.getBalance() << "\n";
                 cout << "Enter de tiep tuc";
                 cin.get();
-                tempAcc.clrscr();
+                clrscr();
                 return;
             }
         }
         cout << "Sai tai khoan hoac mat khau!\n";
         cout << "Enter de tiep tuc";
         cin.get();
-        tempAcc.clrscr();
+        clrscr();
     }
-
     static void adminMenu(account& adminAcc) {
         int choice;
-        account tempAcc;
         do {
-            tempAcc.clrscr();
+            clrscr();
             cout << "\n=== MENU QUAN LY ===" << endl;
             cout << "1. Theo doi danh sach nhom" << endl;
             cout << "2. Dieu chinh thong tin tai khoan" << endl;
@@ -621,23 +541,22 @@ public:
             cout << "Chon: ";
             cin >> choice;
             cin.ignore();
-
             switch (choice) {
                 case 1:
-                    tempAcc.clrscr();
+                    clrscr();
                     adminTheodoiDanhsach();
                     cout << "Enter de tiep tuc";
                     cin.get();
                     break;
                 case 2:
-                    tempAcc.clrscr();
+                    clrscr();
                     adminDieuChinhThongtin();
                     cout << "Enter de tiep tuc";
                     cin.get();
                     break;
                 case 3:
                     {
-                        tempAcc.clrscr();
+                        clrscr();
                         account acc;
                         acc.dangky(true);
                         if (luuDuLieu()) {
@@ -648,7 +567,7 @@ public:
                     }
                     break;
                 case 0:
-                    tempAcc.clrscr();
+                    clrscr();
                     cout << "Dang xuat thanh cong.\n";
                     cout << "Enter de tiep tuc";
                     cin.get();
@@ -660,11 +579,9 @@ public:
             }
         } while (choice != 0);
     }
-
     static void adminTheodoiDanhsach() {
         vector<account> coGiaoDich;
         vector<account> chuaGiaoDich;
-
         for (const auto& acc : danhsachtaikhoan) {
             bool hasTransaction = false;
             for (const auto& transaction : Wallet::transaction_log) {
@@ -673,14 +590,12 @@ public:
                     break;
                 }
             }
-
             if (hasTransaction) {
                 coGiaoDich.push_back(acc);
             } else {
                 chuaGiaoDich.push_back(acc);
             }
         }
-
         cout << "\n=== DANH SACH TAI KHOAN CO GIAO DICH ===\n";
         for (const auto& acc : coGiaoDich) {
             cout << "Tai khoan: " << acc.getUsername()
@@ -689,7 +604,6 @@ public:
                  << " | So du: " << acc.getWallet().getBalance()
                  << " | Loai: " << (acc.getLoai() == admin ? "Quan ly" : "Nguoi dung") << endl;
         }
-
         cout << "\n=== DANH SACH TAI KHOAN CHUA CO GIAO DICH ===\n";
         for (const auto& acc : chuaGiaoDich) {
             cout << "Tai khoan: " << acc.getUsername()
@@ -699,53 +613,38 @@ public:
                  << " | Loai: " << (acc.getLoai() == admin ? "Quan ly" : "Nguoi dung") << endl;
         }
     }
-
     static void adminDieuChinhThongtin() {
-        account tempAcc;
-        tempAcc.clrscr();
+        clrscr();
         string adminUser, adminPass;
         cout << "Nhap tai khoan admin: ";
         getline(cin, adminUser);
         cout << "Nhap mat khau admin: ";
         getline(cin, adminPass);
-
-        auto adminIt = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),
-                             [&adminUser, &adminPass](const account& acc) {
-                                 return acc.getUsername() == adminUser &&
-                                        acc.kiemtramatkhau(adminPass) &&
-                                        acc.getLoai() == admin;
-                             });
-
+        auto adminIt = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),[&adminUser, &adminPass](const account& acc){
+            return acc.getUsername() == adminUser && acc.kiemtramatkhau(adminPass) && acc.getLoai() == admin;
+        });
         if (adminIt == danhsachtaikhoan.end()) {
             cout << "Xac thuc admin that bai!\n";
             return;
         }
-
         string targetUser;
         cout << "Nhap tai khoan can dieu chinh: ";
         getline(cin, targetUser);
-
-        auto targetIt = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),
-                              [&targetUser](const account& acc) {
-                                  return acc.getUsername() == targetUser;
-                              });
-
+        auto targetIt = find_if(danhsachtaikhoan.begin(), danhsachtaikhoan.end(),[&targetUser](const account& acc) {
+            return acc.getUsername() == targetUser;
+        });
         if (targetIt == danhsachtaikhoan.end()) {
             cout << "Tai khoan khong ton tai!\n";
             return;
         }
-
         account& targetAcc = *targetIt;
-
         int choice;
         cout << "Chon thong tin can dieu chinh:\n";
-        cout << "1. Email\n2. So dien thoai\n3. Ten tai khoan\nChon: ";
+        cout << "1. Email\n2. So dien thoai\nChon: ";
         cin >> choice;
         cin.ignore();
-
         string oldValue, newValue;
         string fieldName;
-
         switch (choice) {
             case 1:
                 cout << "Nhap email moi: ";
@@ -769,36 +668,21 @@ public:
                 fieldName = "so dien thoai";
                 targetAcc.setPhone(newValue);
                 break;
-            case 3:
-                cout << "Nhap ten tai khoan moi: ";
-                getline(cin, newValue);
-                if (kiemtrataikhoantrung(newValue)) {
-                    cout << "Ten tai khoan da ton tai!\n";
-                    return;
-                }
-                oldValue = targetAcc.getUsername();
-                fieldName = "ten tai khoan";
-                targetAcc.setUsername(newValue);
-                break;
             default:
                 cout << "Lua chon khong hop le!\n";
                 return;
         }
-
         string otp = taoOTP();
         targetAcc.hashotp = targetAcc.hashOTP(otp);
-
         cout << "\n=== THONG BAO THAY DOI THONG TIN ===\n";
         cout << "Tai khoan cua ban da duoc yeu cau thay doi boi quan tri vien\n";
         cout << "Thong tin thay doi: " << fieldName << "\n";
         cout << "Gia tri cu: " << oldValue << "\n";
         cout << "Gia tri moi: " << newValue << "\n";
         cout << "Ma OTP xac nhan: " << otp << "\n\n";
-
         cout << "Nhap OTP de xac nhan thay doi: ";
         string inputOTP;
         getline(cin, inputOTP);
-
         if (targetAcc.kiemtraOTP(inputOTP)) {
             if (luuDuLieu()) {
                 cout << "Cap nhat thong tin thanh cong!\n";
@@ -807,7 +691,6 @@ public:
                 switch (choice) {
                     case 1: targetAcc.setEmail(oldValue); break;
                     case 2: targetAcc.setPhone(oldValue); break;
-                    case 3: targetAcc.setUsername(oldValue); break;
                 }
             }
         } else {
@@ -815,28 +698,22 @@ public:
             switch (choice) {
                 case 1: targetAcc.setEmail(oldValue); break;
                 case 2: targetAcc.setPhone(oldValue); break;
-                case 3: targetAcc.setUsername(oldValue); break;
             }
         }
     }
-
     static bool luuDuLieu() {
         ofstream file(DATA_FILE);
         if (!file.is_open()) return false;
-
         for (const auto& acc : danhsachtaikhoan) {
             file << acc.username << "|" << acc.hashpassword << "|" << acc.email << "|" << acc.phone << "|" << acc.loai << "\n";
         }
         file.close();
-
         if (!saveWallets(danhsachtaikhoan)) return false;
         return true;
     }
-
     static bool taiDuLieu() {
         ifstream file(DATA_FILE);
         if (!file.is_open()) return false;
-
         danhsachtaikhoan.clear();
         string line;
         while (getline(file, line)) {
@@ -848,7 +725,6 @@ public:
             getline(ss, acc.email, '|');
             getline(ss, acc.phone, '|');
             getline(ss, loaiStr);
-
             try {
                 acc.loai = static_cast<loaitaikhoan>(stoi(loaiStr));
                 danhsachtaikhoan.push_back(acc);
@@ -857,16 +733,14 @@ public:
             }
         }
         file.close();
-
         if (!loadWallets(danhsachtaikhoan)) return false;
         if (!Wallet::loadTransactionLog()) return false;
         return true;
     }
-
     static void functionMenu(account& loggedInAcc, bool& isLoggedIn) {
         int choice;
         do {
-            loggedInAcc.clrscr();
+            clrscr();
             cout << "\n=== MENU CHUC NANG ===" << endl;
             cout << "1. Doi mat khau" << endl;
             cout << "2. Thay doi thong tin" << endl;
@@ -877,40 +751,39 @@ public:
             cout << "Chon: ";
             cin >> choice;
             cin.ignore();
-
             switch (choice) {
                 case 1:
-                    loggedInAcc.clrscr();
+                    clrscr();
                     doiMatKhau();
                     cout << "Enter de tiep tuc";
                     cin.get();
                     break;
                 case 2:
-                    loggedInAcc.clrscr();
+                    clrscr();
                     thaydoiThongtin();
                     cout << "Enter de tiep tuc";
                     cin.get();
                     break;
                 case 3:
-                    loggedInAcc.clrscr();
+                    clrscr();
                     xemThongtin();
                     cout << "Enter de tiep tuc";
                     cin.get();
                     break;
                 case 4:
-                    loggedInAcc.clrscr();
+                    clrscr();
                     chuyenDiem();
                     cout << "Enter de tiep tuc";
                     cin.get();
                     break;
                 case 5:
-                    loggedInAcc.clrscr();
+                    clrscr();
                     xemLichSuGiaoDich();
                     cout << "Enter de tiep tuc";
                     cin.get();
                     break;
                 case 0:
-                    loggedInAcc.clrscr();
+                    clrscr();
                     cout << "Dang xuat thanh cong.\n";
                     isLoggedIn = false;
                     cout << "Enter de tiep tuc";
@@ -925,22 +798,15 @@ public:
         } while (choice != 0 && isLoggedIn);
     }
 };
-
 vector<account> account::danhsachtaikhoan;
 const string account::DATA_FILE = "accounts.txt";
-
 int main() {
-    if (!account::taiDuLieu()) {
-        cout << "Khong the tai du lieu, tao file moi\n";
-    }
-
     account loggedInAcc;
     bool isLoggedIn = false;
-
     while (true) {
         if (!isLoggedIn) {
             account tempAcc;
-            tempAcc.clrscr();
+            clrscr();
             int choice;
             cout << "\n=== HE THONG QUAN LY TAI KHOAN ===" << endl;
             cout << "1. Dang ky" << endl;
@@ -950,10 +816,9 @@ int main() {
             cout << "Chon: ";
             cin >> choice;
             cin.ignore();
-
             switch (choice) {
                 case 1:
-                    tempAcc.clrscr();
+                    clrscr();
                     tempAcc.dangky(false);
                     if (!tempAcc.kiemtrataikhoantrung(tempAcc.getUsername())) {
                         loggedInAcc = tempAcc;
@@ -980,7 +845,7 @@ int main() {
                     cin.get();
                     break;
                 case 0:
-                    tempAcc.clrscr();
+                    clrscr();
                     cout << "Thoat chuong trinh...\n";
                     return 0;
                 default:
@@ -993,6 +858,6 @@ int main() {
             account::functionMenu(loggedInAcc, isLoggedIn);
         }
     }
-
     return 0;
 }
+
